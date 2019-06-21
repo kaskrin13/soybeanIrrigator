@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <script src="static/js/Chart.min.js"></script>
+    <script src="static/js/jquery-3.4.1.min.js"></script>
+</head>
+
+<body onload="preloader()">
+
+    <div id="loader">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+    </div>
+
+    <div class="grid-container" style="display:none;" id="myDiv">
+        <div class="Header">
+            <h1 align="center">
+                Soybean Irrigator
+            </h1>
+        </div>
+        <div class="Explanation">
+            <p>
+                Filler Text:
+                <blockquote>
+                    Evapotranspiration (ET) is the sum of evaporation and plant transpiration from the Earth's land and ocean 
+                    surface to the atmosphere. Evaporation accounts for the movement of water to the air from sources such as 
+                    the soil, canopy interception, and waterbodies. Transpiration accounts for the movement of water within a 
+                    plant and the subsequent loss of water as vapor through stomata in its leaves. Evapotranspiration is an 
+                    important part of the water cycle. An element (such as a tree) that contributes to evapotranspiration can 
+                    be called an evapotranspirator.
+                </blockquote>
+                <a href="https://en.wikipedia.org/wiki/Evapotranspiration">From Wikipedia</a>
+            </p>
+        </div>
+        <div class="Content">
+            <div class="Table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Station</th>
+                            <th>Temperature (&#176;F)</th>
+                            <th>Wind Speed (MPH)</th>
+                            <th>Time (CST)</th>
+                            <th>Low Temperature (&#176;F)</th>
+                            <th>Time of Low Temperature (CST)</th>
+                            <th>High Temperature (&#176;F)</th>
+                            <th>Time of High Temperature (CST)</th>
+                        </tr>
+                    </thead>
+                
+                    <!-- Table with static filler data -->
+                    <tbody>
+                        <tr onclick="showHide(rowClick(this));showHide(rowClick(this)+1)">
+                            <td>Cleveland</td>
+                            <td style="background-color:LightGreen;">85.0</td>
+                            <td>6.2</td>
+                            <td>14:00:00</td>
+                            <td>68.0</td>
+                            <td>2:16:02</td>
+                            <td>88.0</td>
+                            <td>13:35:02</td>
+                        </tr>
+
+                        <tr id="row1" style="display:none;">
+                                <td colspan="4">
+                                    <canvas id="chart1" width="300" height="200" style="display:inline"></canvas>
+                                </td>
+                                <td colspan="4">
+                                    <canvas id="chart2" width="300" height="200" style="display:inline"></canvas>
+                                </td>
+                            </tr>
+                        <tr id="row2" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart3" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart4" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+
+                        <tr onclick="showHide(rowClick(this));showHide(rowClick(this)+1)">
+                            <td>Cypress Farm</td>
+                            <td style="background-color:LightGreen;">88.0</td>
+                            <td>4.9</td>
+                            <td>14:00:00</td>
+                            <td>69.0</td>
+                            <td>5:00:03</td>
+                            <td>90.0</td>
+                            <td>13:20:05</td>
+                        </tr>
+
+                        <tr id="row4" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart5" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart6" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        <tr id="row5" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart7" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart8" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+
+                        <tr onclick="showHide(rowClick(this));showHide(rowClick(this)+1)">
+                            <td>Lyon</td>
+                            <td style="background-color:LightGreen;">87.0</td>
+                            <td>5.7</td>
+                            <td>14:00:00</td>
+                            <td>69.0</td>
+                            <td>5:00:00</td>
+                            <td>87.0</td>
+                            <td>14:00:00</td>
+                        </tr>
+
+                        <tr id="row7" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart9" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart10" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        <tr id="row8" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart11" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart12" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        
+                        <tr onclick="showHide(rowClick(this));showHide(rowClick(this)+1)">
+                            <td>Macon VTcr</td>
+                            <td style="background-color:LightGreen;">86.0</td>
+                            <td>3.8</td>
+                            <td>14:00:00</td>
+                            <td>70.0</td>
+                            <td>5:00:01</td>
+                            <td>91.0</td>
+                            <td>12:35:01</td>
+                        </tr>
+
+                        <tr id="row10" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart13" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart14" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        <tr id="row11" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart15" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart16" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        
+                        <tr onclick="showHide(rowClick(this));showHide(rowClick(this)+1)">
+                            <td>Mound Bayou</td>
+                            <td style="background-color:LightGreen;">87.0</td>
+                            <td>4.7</td>
+                            <td>14:00:00</td>
+                            <td>68.0</td>
+                            <td>5:08:00</td>
+                            <td>87.0</td>
+                            <td>13:57:03</td>
+                        </tr>
+
+                        <tr id="row13" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart17" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart18" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        <tr id="row14" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart19" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart20" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        
+                        <tr onclick="showHide(rowClick(this));showHide(rowClick(this)+1)">
+                            <td>Prairie</td>
+                            <td style="background-color:Crimson;">83.0</td>
+                            <td>6.6</td>
+                            <td>14:00:00</td>
+                            <td>68.0</td>
+                            <td>5:01:04</td>
+                            <td>90.0</td>
+                            <td>13:01:01</td>
+                        </tr>
+
+                        <tr id="row16" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart21" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart22" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        <tr id="row17" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart23" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart24" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        
+                        <tr onclick="showHide(rowClick(this));showHide(rowClick(this)+1)">
+                            <td>Sidon</td>
+                            <td style="background-color:LightGreen;">86.0</td>
+                            <td>2.3</td>
+                            <td>14:00:00</td>
+                            <td>72.0</td>
+                            <td>5:10:05</td>
+                            <td>89.0</td>
+                            <td>12:23:04</td>
+                        </tr>
+
+                        <tr id="row19" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart25" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart26" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        <tr id="row20" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart27" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart28" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        
+                        <tr onclick="showHide(rowClick(this));showHide(rowClick(this)+1)">
+                            <td>Stoneville AWS</td>
+                            <td style="background-color:LightGreen;">84.0</td>
+                            <td>2.8</td>
+                            <td>14:00:00</td>
+                            <td>67.0</td>
+                            <td>4:16:04</td>
+                            <td>85.0</td>
+                            <td>13:34:05</td>
+                        </tr>
+
+                        <tr id="row22" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart29" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart30" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        <tr id="row23" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart31" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart32" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        
+                        <tr onclick="showHide(rowClick(this));showHide(rowClick(this)+1)">
+                            <td>Stoneville F10</td>
+                            <td style="background-color:LightGreen;">84.0</td>
+                            <td>4.1</td>
+                            <td>14:00:00</td>
+                            <td>68.0</td>
+                            <td>5:05:00</td>
+                            <td>85.0</td>
+                            <td>13:53:00</td>
+                        </tr>
+
+                        <tr id="row25" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart33" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart34" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        <tr id="row26" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart35" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart36" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        
+                        <tr onclick="showHide(rowClick(this));showHide(rowClick(this)+1)">
+                            <td>Stoneville W</td>
+                            <td style="background-color:LightGreen;">83.0</td>
+                            <td>2.8</td>
+                            <td>14:00:00</td>
+                            <td>68.0</td>
+                            <td>5:01:01</td>
+                            <td>86.0</td>
+                            <td>13:28:01</td>
+                        </tr>
+
+                        <tr id="row28" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart37" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart38" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        <tr id="row29" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart39" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart40" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        
+                        <tr onclick="showHide(rowClick(this));showHide(rowClick(this)+1)">
+                            <td>Thighman</td>
+                            <td style="background-color:LightGreen;">84.0</td>
+                            <td>2.0</td>
+                            <td>14:00:00</td>
+                            <td>70.0</td>
+                            <td>4:12:05</td>
+                            <td>85.0</td>
+                            <td>13:13:01</td>
+                        </tr>
+
+                        <tr id="row31" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart41" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart42" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        <tr id="row32" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart43" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart44" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        
+                        <tr onclick="showHide(rowClick(this));showHide(rowClick(this)+1)">
+                            <td>Tribbett</td>
+                            <td style="background-color:LightGreen;">90.0</td>
+                            <td>4.1</td>
+                            <td>14:00:00</td>
+                            <td>72.0</td>
+                            <td>4:37:04</td>
+                            <td>92.0</td>
+                            <td>13:53:00</td>
+                        </tr>
+
+                        <tr id="row34" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart45" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart46" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        <tr id="row35" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart47" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart48" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        
+                        <tr onclick="showHide(rowClick(this));showHide(rowClick(this)+1)">
+                            <td>Verona</td>
+                            <td style="background-color:LightGreen;">90.0</td>
+                            <td>4.1</td>
+                            <td>14:00:00</td>
+                            <td>72.0</td>
+                            <td>4:37:04</td>
+                            <td>92.0</td>
+                            <td>13:53:00</td>
+                        </tr>
+
+                        <tr id="row37" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart49" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart50" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                        <tr id="row38" style="display:none;">
+                            <td colspan="4">
+                                <canvas id="chart51" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart52" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>                    
+            </div>
+            <div class="Map">
+                <div id="map"></div>
+                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0nf_UtMvmcVf7LvdLrxI6quPis9Abotw&callback=initMap"></script>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js scripts -->
+    <script>
+        // Global parameters:
+        // do not resize the chart canvas when its container does (keep at original size)
+        Chart.defaults.global.defaultFontColor = "#fff";
+        Chart.defaults.global.defaultFontStyle = "bold";
+
+        function createChart(chartID, values, xlabels, legend) {
+            var chartData = {
+            labels : xlabels,
+            datasets : [{
+                label: legend,
+                fill: true,
+                lineTension: 0.1,
+                backgroundColor: "rgba(75,192,192,0.4)",
+                borderColor: "rgba(75,192,192,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: "rgba(75,192,192,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data : values,
+                spanGaps: false
+            }]
+            };
+
+            var str = "chart";
+            str = str + chartID;
+            console.log(typeof(str))
+            console.log(str)
+            var ctx = document.getElementById(str).getContext("2d");
+
+            var chart = new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: {
+                        tooltips: {
+                        enabled: true,
+                        mode: 'single',
+                        callbacks: {
+                            label: function(tooltipItems, data) {
+                                    return tooltipItems.yLabel + ' degrees';
+                                }
+                        }
+                    },
+                }
+            });
+            return chart;
+        }
+        
+        
+
+        var charts = [];
+        var i;
+
+        for (i = 1; i <  53; i++) {
+            var str = "chart";
+            str = str + i;
+
+            if (i % 2 === 0) {
+                eval(str + ' = ' + 'createChart(' + i + ', [{%- for item in values %}{{item}}, {%- endfor %}], [{%- for item in labels %} "{{item}}", {%- endfor %}], "{{ legend }}");');
+            }
+            else {
+                eval(str + ' = ' + 'createChart(' + i + ', [{%- for item in values2 %}{{item}}, {%- endfor %}], [{%- for item in labels %} "{{item}}", {%- endfor %}], "{{ legend }}");');
+            }
+        };
+    </script>
+
+    <!-- Show/Hide charts -->
+    <script>
+        function rowClick(element){
+            return element.rowIndex
+        }
+        function showHide(id) {
+            var charts = document.getElementById("row"+id);
+            if (charts.style.display === "none") {
+                charts.style.display = "table-row";
+            } else {
+                charts.style.display = "none";
+            }
+        }
+    </script>
+
+    <!-- Preloader -->
+    <script>
+        var myVar;
+        
+        function preloader() {
+          myVar = setTimeout(showPage, 1000);
+        }
+        
+        function showPage() {
+          document.getElementById("loader").style.display = "none";
+          document.getElementById("myDiv").style.display = "grid";
+        }
+    </script>
+
+    <!-- Google Maps and pins -->
+    <script type="text/javascript">
+        function initMap() {
+            var station1 = {
+                info: '<strong>Aberdeen VTcr, MS</strong>\
+                            <br>VT2018-0001<br>',
+                lat: 33.723746,  
+                long: -88.65824
+            };
+
+            var station2 = {
+                info: '<strong>Bee Lake, MS</strong>\
+                            <br>DREC-2010<br>',
+                lat: 33.0443,  
+                long: -90.36007
+            };
+
+            var station3 = {
+                info: '<strong>Brooksville, MS</strong>\
+                            <br>DREC-2006<br>',
+                lat: 33.2599,  
+                long: -88.56284
+            };
+
+            var station4 = {
+                info: '<strong>Brooksville2 VTso, MS</strong>\
+                            <br>VT2018-0002<br>',
+                lat: 33.239933,  
+                long: -88.5129
+            };
+
+            var station5 = {
+                info: '<strong>Brown Loam Exp Stn VT, MS</strong>\
+                            <br>VT2018-0003<br>',
+                lat: 32.21274,  
+                long: -90.52107
+            };
+
+            var station6 = {
+                info: '<strong>Brown Loam Exp. Stn, MS</strong>\
+                            <br>DREC-2019<br>',
+                lat: 32.21022,  
+                long: -90.51228
+            };
+
+            var station7 = {
+                info: '<strong>Catladge Farm, MS</strong>\
+                            <br>DS-0003<br>',
+                lat: 32.666566,  
+                long: -90.968841
+            };
+
+            var station8 = {
+                info: '<strong>Clarksdale VTso, MS</strong>\
+                            <br>VT2018-0006<br>',
+                lat: 34.059234,  
+                long: -90.577096
+            };
+
+            var station9 = {
+                info: '<strong>Cleveland, MS</strong>\
+                            <br>DS-0002<br>',
+                lat: 33.758496,  
+                long: -90.815173
+            };
+
+            var station10 = {
+                info: '<strong>COOP Stoneville, MS</strong>\
+                            <br>COOP-Stoneville<br>',
+                lat: 33.431177,  
+                long: -90.910764
+            };
+            
+            var station11 = {
+                info: '<strong>Cypress Farm, MS</strong>\
+                            <br>DS-0001<br>',
+                lat: 34.073390,  
+                long: -90.482674
+            };
+
+            var station12 = {
+                info: '<strong>Jackson Co, MS</strong>\
+                            <br>DREC-2011<br>',
+                lat: 30.6392,  
+                long: -88.46277
+            };
+
+            var station13 = {
+                info: '<strong>Longwood VTso, MS</strong>\
+                            <br>VT2018-0007<br>',
+                lat: 33.301961,  
+                long: -91.005963
+            };
+            
+            var station14 = {
+                info: '<strong>Lyon, MS</strong>\
+                            <br>DREC-2001<br>',
+                lat: 34.24959,  
+                long: -90.54206
+            };
+
+            var station15 = {
+                info: '<strong>Macon VTcr, MS</strong>\
+                            <br>VT2019-0008<br>',
+                lat: 33.1469,  
+                long: -88.51698
+            };
+            
+            var station16 = {
+                info: '<strong>Mound Bayou, MS</strong>\
+                            <br>DREC-2013<br>',
+                lat: 33.87123,  
+                long: -90.70963
+            };
+
+            var station17 = {
+                info: '<strong>Olive Branch VTcr, MS</strong>\
+                            <br>VT2018-0005<br>',
+                lat: 34.89863,  
+                long: -89.899648
+            };
+
+            var station18 = {
+                info: '<strong>Olive Branch2 VTso, MS</strong>\
+                            <br>VT2018-0009<br>',
+                lat: 34.867305,  
+                long: -89.976208
+            };
+
+            var station19 = {
+                info: '<strong>Onward VT, MS</strong>\
+                            <br>VT2018-0010<br>',
+                lat: 32.76372,  
+                long: -91.075301
+            };
+
+            var station20 = {
+                info: '<strong>Pontotoc AWS COOP, MS</strong>\
+                            <br>COOP-0002<br>',
+                lat: 34.138698,  
+                long: -89.006969
+            };
+            
+            var station21 = {
+                info: '<strong>Prairie, MS</strong>\
+                            <br>DREC-2007<br>',
+                lat: 33.79764,  
+                long: -88.65915
+            };
+            
+            var station22 = {
+                info: '<strong>Sidon, MS</strong>\
+                            <br>DREC-2003<br>',
+                lat: 33.42334,  
+                long: -90.2346
+            };
+            
+            var station23 = {
+                info: '<strong>Stockett Farm, MS</strong>\
+                            <br>DREC-2012<br>',
+                lat: 31.04377,  
+                long: -91.31052
+            };
+            
+            var station24 = {
+                info: '<strong>Stoneville AWS, MS</strong>\
+                            <br>DREC-2004<br>',
+                lat: 33.43122,  
+                long: -90.91077
+            };
+            
+            var station25 = {
+                info: '<strong>Stoneville F10, MS</strong>\
+                            <br>DREC-2015<br>',
+                lat: 33.416512,  
+                long: -90.913961
+            };
+
+            var station26 = {
+                info: '<strong>Stoneville SW, MS</strong>\
+                            <br>DREC-2009<br>',
+                lat: 33.40542,  
+                long: -90.92729
+            };
+            
+            var station27 = {
+                info: '<strong>Stoneville W, MS</strong>\
+                            <br>DREC-2014<br>',
+                lat: 33.42269,  
+                long: -90.957882
+            };
+            
+            var station28 = {
+                info: '<strong>Thighman, MS</strong>\
+                            <br>DREC-2002<br>',
+                lat: 33.35738,  
+                long: -90.50306
+            };
+
+            var station29 = {
+                info: '<strong>Tippo VT, MS</strong>\
+                            <br>VT2018-0012<br>',
+                lat: 33.95679,  
+                long: -90.1657
+            };
+
+            var station30 = {
+                info: '<strong>Tribbett, MS</strong>\
+                            <br>DREC-2008<br>',
+                lat: 33.35236,  
+                long: -90.80201
+            };
+            
+            var station31 = {
+                info: '<strong>Verona, MS</strong>\
+                            <br>DREC-2005<br>',
+                lat: 34.16466,  
+                long: -88.72394
+            };
+
+            var station32 = {
+                info: '<strong>Verona VTso, MS</strong>\
+                            <br>VT2018-0004<br>',
+                lat: 34.166325,  
+                long: -88.734339
+            };
+
+            var locations = [
+                [station1.info, station1.lat, station1.long, 0],
+                [station2.info, station2.lat, station2.long, 1],
+                [station3.info, station3.lat, station3.long, 2],
+                [station4.info, station4.lat, station4.long, 3],
+                [station5.info, station5.lat, station5.long, 4],
+                [station6.info, station6.lat, station6.long, 5],
+                [station7.info, station7.lat, station7.long, 6],
+                [station8.info, station8.lat, station8.long, 7],
+                [station9.info, station9.lat, station9.long, 8],
+                [station10.info, station10.lat, station10.long, 9],
+                [station11.info, station11.lat, station11.long, 10],
+                [station12.info, station12.lat, station12.long, 11],
+                [station13.info, station13.lat, station13.long, 12],
+                [station14.info, station14.lat, station14.long, 13],
+                [station15.info, station15.lat, station15.long, 14],
+                [station16.info, station16.lat, station16.long, 15],
+                [station17.info, station17.lat, station17.long, 16],
+                [station18.info, station18.lat, station18.long, 17],
+                [station19.info, station19.lat, station19.long, 18],
+                [station20.info, station20.lat, station20.long, 19],
+                [station21.info, station21.lat, station21.long, 20],
+                [station22.info, station22.lat, station22.long, 21],
+                [station23.info, station23.lat, station23.long, 22],
+                [station24.info, station24.lat, station24.long, 23],
+                [station25.info, station25.lat, station25.long, 24],
+                [station26.info, station26.lat, station26.long, 25],
+                [station27.info, station27.lat, station27.long, 26],
+                [station28.info, station28.lat, station28.long, 27],
+                [station29.info, station29.lat, station29.long, 28],
+                [station30.info, station30.lat, station30.long, 29],
+                [station31.info, station31.lat, station31.long, 30],
+                [station32.info, station32.lat, station32.long, 31]
+            ];
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 6,
+                center: new google.maps.LatLng(31.284673, -89.556397),
+                mapTypeId: google.maps.MapTypeId.TERRAIN
+            });
+
+            var infowindow = new google.maps.InfoWindow({});
+
+            var marker, i;
+
+            for (i = 0; i < locations.length; i++) {
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                    map: map
+                });
+
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                        infowindow.setContent(locations[i][0]);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+
+                infowindow.setContent(locations[i][0]);
+                infowindow.open(map, marker);
+            }
+        }
+    </script>
+</body>
+
+</html>
