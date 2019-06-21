@@ -10,6 +10,7 @@ import codecs
 import csv
 import sys
 import math
+import lxml
 from multiprocessing import Pool
 
 # goes to a website, finds a table on the page and inserts it into a 2d list
@@ -22,7 +23,7 @@ def getDataFromHTML(url):
     html = requests.get(url, stream=True)
 
     # get table from html
-    data = [[cell.text.strip() for cell in row('td')] for row in bs4.BeautifulSoup(html.content, "html5lib")('tr')]
+    data = [[cell.text.strip() for cell in row('td')] for row in bs4.BeautifulSoup(html.content, "lxml")('tr')]
 
     # if no table is found return an empty list
     if not data:

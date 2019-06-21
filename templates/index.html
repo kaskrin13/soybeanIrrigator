@@ -424,7 +424,7 @@
             </div>
             <div class="Map">
                 <div id="map"></div>
-                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0nf_UtMvmcVf7LvdLrxI6quPis9Abotw&callback=initMap"></script>
+                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL0tWzi1kvQSpq9jTjQJiwUVXoRXtOL7U&callback=initMap"></script>
             </div>
         </div>
     </div>
@@ -465,8 +465,6 @@
 
             var str = "chart";
             str = str + chartID;
-            console.log(typeof(str))
-            console.log(str)
             var ctx = document.getElementById(str).getContext("2d");
 
             var chart = new Chart(ctx, {
@@ -488,10 +486,8 @@
         }
         
         
-
-        var charts = [];
+        //TODO: Replace 53 with variable related to number of stations * number of charts per station
         var i;
-
         for (i = 1; i <  53; i++) {
             var str = "chart";
             str = str + i;
