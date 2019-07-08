@@ -1,4 +1,4 @@
-html, body, .grid-container { height: 100%; margin: 0; }
+body, .grid-container { height: 100%; margin: 0; }
 
 
 /*--------------- Grid ---------------*/
@@ -15,13 +15,21 @@ html, body, .grid-container { height: 100%; margin: 0; }
 }
 
 .grid-container {
+	background-image: url("../images/background.png");
+	background-attachment: fixed;
+	background-size:cover;
 	display: grid;
 	grid-template-columns: 0.1fr 1fr 1fr 0.1fr;
 	grid-template-rows: 0.3fr 0.5fr 1fr 3fr 0.3fr;
 	grid-template-areas: ". . . ." ". Header Header ." ". Explanation Explanation ." ". Content Content ." ". . . .";
 }
 
-.Header { grid-area: Header; }
+.Header { 
+	grid-area: Header; 
+	color: white;
+	font-weight: bold;
+	font-size: 2rem;
+}
 
 .Explanation {
 	display: grid;
@@ -29,7 +37,6 @@ html, body, .grid-container { height: 100%; margin: 0; }
 	grid-template-rows: 1fr;
 	grid-template-areas: ".";
 	grid-area: Explanation;
-	text-align: left;
 }
 
 .Content {
@@ -102,6 +109,12 @@ html, body, .grid-container { height: 100%; margin: 0; }
 		grid-column: 2;
 		-ms-grid-column-span: 1;
 	}
+}
+
+
+/*--------------- Charts ---------------*/
+canvas {
+	background-color: rgba(255, 255, 255, .9);
 }
 
 
@@ -208,4 +221,39 @@ th {
 	width: 90%;
 	height: 100%;
 	margin-left: auto;
+	max-height: 500px;
+}
+
+
+/*--------------- Blur ---------------*/
+/* https://webdesign.tutsplus.com/tutorials/how-to-create-a-frosted-glass-effect-in-css--cms-32535 */
+.Explanation:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+	bottom: 0;
+	box-shadow: inset 0 0 2000px rgba(0, 0, 0, 1);
+	filter: blur(10px);
+	background: inherit;
+}
+
+.Explanation {
+	background: inherit;
+	margin-bottom: 0px;
+}
+
+.container {
+	text-align: left;
+	color: white;
+	padding-left:50px;
+}
+
+.container a:visited {
+	color: #cc00cc;
+}
+
+.container a:link {
+	color: #6666ff;
 }

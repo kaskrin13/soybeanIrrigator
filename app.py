@@ -1,16 +1,18 @@
 from flask import Flask
 from flask import render_template 
+import evapotranspiration
  
 app = Flask(__name__)
  
  
 @app.route("/")
-def chart():
-    legend = 'Monthly Data'
-    labels = ["January", "February", "March", "April", "May", "June", "July", "August"]
+def index():
+    legend = ["Humidity", "Evapotranspiration", "Rainfall", "Temperature"]
+    labels = ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", 
+                "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]
     values = [10, 9, 8, 7, 6, 4, 7, 8]
-    values2 = [8, 7, 4, 6, 7, 8, 9, 10]
-    return render_template('index.html', values=values, values2=values2, labels=labels, legend=legend)
+    values2 = [68, 77, 84, 86]
+    return render_template("index.html", values=values, values2=values2, labels=labels, legend=legend)
  
  
 if __name__ == "__main__":

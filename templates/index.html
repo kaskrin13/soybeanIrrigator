@@ -25,18 +25,20 @@
             </h1>
         </div>
         <div class="Explanation">
-            <p>
-                Filler Text:
-                <blockquote>
-                    Evapotranspiration (ET) is the sum of evaporation and plant transpiration from the Earth's land and ocean 
-                    surface to the atmosphere. Evaporation accounts for the movement of water to the air from sources such as 
-                    the soil, canopy interception, and waterbodies. Transpiration accounts for the movement of water within a 
-                    plant and the subsequent loss of water as vapor through stomata in its leaves. Evapotranspiration is an 
-                    important part of the water cycle. An element (such as a tree) that contributes to evapotranspiration can 
-                    be called an evapotranspirator.
-                </blockquote>
-                <a href="https://en.wikipedia.org/wiki/Evapotranspiration">From Wikipedia</a>
-            </p>
+            <div class="container">
+                <p>
+                    Filler Text:
+                    <blockquote>
+                        Evapotranspiration (ET) is the sum of evaporation and plant transpiration from the Earth's land and ocean 
+                        surface to the atmosphere. Evaporation accounts for the movement of water to the air from sources such as 
+                        the soil, canopy interception, and waterbodies. Transpiration accounts for the movement of water within a 
+                        plant and the subsequent loss of water as vapor through stomata in its leaves. Evapotranspiration is an 
+                        important part of the water cycle. An element (such as a tree) that contributes to evapotranspiration can 
+                        be called an evapotranspirator.
+                    </blockquote>
+                    <a href="https://en.wikipedia.org/wiki/Evapotranspiration">From Wikipedia</a>
+                </p>
+            </div>
         </div>
         <div class="Content">
             <div class="Table">
@@ -434,7 +436,7 @@
     <script>
         // Global parameters:
         // do not resize the chart canvas when its container does (keep at original size)
-        Chart.defaults.global.defaultFontColor = "#fff";
+        Chart.defaults.global.defaultFontColor = "#000";
         Chart.defaults.global.defaultFontStyle = "bold";
 
         function createChart(chartID, values, xlabels, legend) {
@@ -455,7 +457,7 @@
                 pointBorderWidth: 1,
                 pointHoverRadius: 5,
                 pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBorderColor: "rgba(255,255,255,1)",
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
@@ -472,7 +474,7 @@
                 type: 'line',
                 data: chartData,
                 options: {
-                        tooltips: {
+                    tooltips: {
                         enabled: true,
                         mode: 'single',
                         callbacks: {
@@ -481,6 +483,21 @@
                                 }
                         }
                     },
+                    scales: {
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Units'
+                            }
+                            
+                        }],
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Time'
+                            }
+                        }]
+                    }
                 }
             });
             return chart;
@@ -489,16 +506,61 @@
         
         //TODO: Replace 53 with variable related to number of stations * number of charts per station
         var i;
+        var count = 1;
         for (i = 1; i <  53; i++) {
             var str = "chart";
             str = str + i;
 
+            if (count > 4) {
+                count = 1;
+            }
+
             if (i % 2 === 0) {
-                eval(str + ' = ' + 'createChart(' + i + ', [{%- for item in values %}{{item}}, {%- endfor %}], [{%- for item in labels %} "{{item}}", {%- endfor %}], "{{ legend }}");');
+                if (i % 4 === 0) {
+                    // Humidity
+                    eval(str + ' = ' + 'createChart(' + i + ', [{%- for item in values %}{{item}}, {%- endfor %}], [{%- for item in labels %} "{{item}}", {%- endfor %}], "{{ legend[0] }}");');    
+                }
+                else {
+                    // Evapotranspiration
+                    eval(str + ' = ' + 'createChart(' + i + ', [{%- for item in values %}{{item}}, {%- endfor %}], [{%- for item in labels %} "{{item}}", {%- endfor %}], "{{ legend[1] }}");');
+                }
             }
             else {
-                eval(str + ' = ' + 'createChart(' + i + ', [{%- for item in values2 %}{{item}}, {%- endfor %}], [{%- for item in labels %} "{{item}}", {%- endfor %}], "{{ legend }}");');
+                if (i % 3 === 0) {
+                    // Rainfall
+                    eval(str + ' = ' + 'createChart(' + i + ', [{%- for item in values2 %}{{item}}, {%- endfor %}], [{%- for item in labels %} "{{item}}", {%- endfor %}], "{{ legend[2] }}");');
+                }
+                else {
+                    // Temperature
+                    eval(str + ' = ' + 'createChart(' + i + ', [{%- for item in values2 %}{{item}}, {%- endfor %}], [{%- for item in labels %} "{{item}}", {%- endfor %}], "{{ legend[3] }}");');
+                }
             }
+
+            switch(count) {
+                case 1:
+                    eval(str + '.data.datasets[0].backgroundColor = "rgba(75,192,100,0.4)";' );
+                    eval(str + '.data.datasets[0].borderColor = "rgba(75,192,100,1)";' );
+                    eval(str + '.data.datasets[0].pointBorderColor = "rgba(75,192,100,1)";' );
+                    eval(str + '.data.datasets[0].pointHoverBackgroundColor = "rgba(75,192,100,1)";' );
+                    eval(str + '.update();');
+                    break;
+                case 2:
+                    eval(str + '.data.datasets[0].backgroundColor = "rgba(192,180,75,0.4)";' );
+                    eval(str + '.data.datasets[0].borderColor = "rgba(192,180,75,1)";' );
+                    eval(str + '.data.datasets[0].pointBorderColor = "rgba(192,180,75,1)";' );
+                    eval(str + '.data.datasets[0].pointHoverBackgroundColor = "rgba(192,180,75,1)";' );
+                    eval(str + '.update();');
+                    break;
+                case 3:
+                    eval(str + '.data.datasets[0].backgroundColor = "rgba(75,75,192,0.4)";' );
+                    eval(str + '.data.datasets[0].borderColor = "rgba(75,75,192,1)";' );
+                    eval(str + '.data.datasets[0].pointBorderColor = "rgba(75,75,192,1)";' );
+                    eval(str + '.data.datasets[0].pointHoverBackgroundColor = "rgba(75,75,192,1)";' );
+                    eval(str + '.update();');
+                    break;
+            }
+
+            count++;
         };
     </script>
 
@@ -563,6 +625,7 @@
             };
 
             var station5 = {
+                icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
                 info: '<strong>Brown Loam Exp Stn VT, MS</strong>\
                             <br>VT2018-0003<br>',
                 lat: 32.21274,  
@@ -806,8 +869,17 @@
             for (i = 0; i < locations.length; i++) {
                 marker = new google.maps.Marker({
                     position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-                    map: map
+                    map: map,
                 });
+                if (i % 2 === 0) {
+                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
+                }
+                else if (i % 3 === 0) {
+                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+                }
+                else {
+                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png')
+                }
 
                 google.maps.event.addListener(marker, 'click', (function(marker, i) {
                     return function() {
