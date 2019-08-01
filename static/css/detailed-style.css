@@ -1,0 +1,113 @@
+html, body, .grid-container { height: 100%; margin: 0; }
+
+/*--------------- Grid ---------------*/
+.grid-container * { 
+    /* border: 1px solid red; */
+    position: relative;
+}
+
+.grid-container *:after { 
+    /* content:attr(class); */
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: .1fr 2fr .1fr;
+    grid-template-rows: .3fr 0.5fr 1fr 1fr 0.3fr;
+    grid-template-areas: ". . ." ". Title ." ". Content ." ". Charts ." ". . .";
+}
+
+.Title { grid-area: Title; }
+
+.Charts { grid-area: Charts; }
+
+.Content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "Data Map";
+    grid-area: Content;
+}
+
+.Data { grid-area: Data; }
+
+.Map { grid-area: Map; }
+
+
+@media all and (-ms-high-contrast:none) {
+    .grid-container {
+        display: -ms-grid;
+        -ms-grid-columns: .1fr 1.5fr .1fr;
+        -ms-grid-rows: .3fr 0.5fr 1fr 1fr 0.3fr;
+    }
+
+    .Title {
+        -ms-grid-row: 2;
+        -ms-grid-row-span: 1;
+        -ms-grid-column: 2;
+        -ms-grid-column-span: 1;
+    }
+
+    .Charts {
+        -ms-grid-row: 4;
+        -ms-grid-row-span: 1;
+        -ms-grid-column: 2;
+        -ms-grid-column-span: 1;
+    }
+
+    .Content {
+        display: -ms-grid;
+        -ms-grid-columns: 1fr 1fr;
+        -ms-grid-rows: 1fr;
+        -ms-grid-row: 3;
+        -ms-grid-row-span: 1;
+        -ms-grid-column: 2;
+        -ms-grid-column-span: 1;
+    }
+
+    .Data {
+        -ms-grid-row: 1;
+        -ms-grid-row-span: 1;
+        -ms-grid-column: 1;
+        -ms-grid-column-span: 1;
+    }
+
+    .Map {
+        -ms-grid-row: 1;
+        -ms-grid-row-span: 1;
+        -ms-grid-column: 2;
+        -ms-grid-column-span: 1;
+    }
+}
+
+/*--------------- Charts ---------------*/
+canvas {
+	background-color: rgba(255, 255, 255, .9);
+}
+
+/*--------------- Table ---------------*/
+table {
+	table-layout: fixed;
+	width: 100%;
+	margin: auto;
+	border-collapse: collapse;
+}
+
+/* Row formatting */
+td {
+    width: 50%;
+	padding: 6px;
+    text-align: center;
+	border-right: 1px solid white;
+}
+
+/*--------------- Embedded Map ---------------*/
+#map {
+    width: 90%;
+    height: 250px;
+    margin-left: auto;
+    margin-right: auto;
+}

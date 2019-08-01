@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="static/css/detailed-style.css" >
+    <script src="static/js/Chart.min.js"></script>
+    <script src="static/js/jquery-3.4.1.min.js"></script>
+    <title>{{ dailyData[0] }}</title>
+</head>
+
+<body>
+<div class="grid-container">
+        <div class="Title">
+            <h1>{{ dailyData[0] }}</h1>
+        </div>
+        <div class="Charts">
+            <div class="Table">
+                <table>
+                    <tr id="row1">
+                            <td colspan="4">
+                                <canvas id="chart1" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                            <td colspan="4">
+                                <canvas id="chart2" width="300" height="200" style="display:inline"></canvas>
+                            </td>
+                        </tr>
+                    <tr id="row2">
+                        <td colspan="4">
+                            <canvas id="chart3" width="300" height="200" style="display:inline"></canvas>
+                        </td>
+                        <td colspan="4">
+                            <canvas id="chart4" width="300" height="200" style="display:inline"></canvas>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="Content">
+            <div class="Data">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Station</th>
+                            <th>Time (CST)</th>
+                            <th>Temperature (&#176;F)</th>
+                            <th>Wind Speed (MPH)</th>
+                            <th>Humidity</th>
+                            <th>Low Temperature (&#176;F)</th>
+                            <th>High Temperature (&#176;F)</th>
+                            <th>Precipitation (in)</th>
+                        </tr>
+                    </thead>
+    
+                    <tbody>
+                        <tr>
+                            <td data-title="Station">{{ hourlyData[0] }}</td>
+                            <td data-title="Time">{{ hourlyData[1] }}</td>
+                            <td data-title="Temperature">{{ hourlyData[2] }}</td>
+                            <td data-title="Wind Speed (MPH)">{{ hourlyData[3] }}</td>
+                            <td data-title="Humidity">{{ hourlyData[4] }}</td>
+                            <td data-title="Low Temperature">{{ hourlyData[5] }}</td>
+                            <td data-title="High Temperature">{{ hourlyData[6] }}</td>
+                            <td data-title="Precipitation">{{hourlyData[7]}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="Map">
+                <div id="map"></div>
+                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL0tWzi1kvQSpq9jTjQJiwUVXoRXtOL7U&callback=initMap"></script>
+                <a name="map"><a/>
+            </div>
+        </div>
+    </div>
+
+<script>
+/* Chart.js options */
+// Global parameters:
+Chart.defaults.global.defaultFontColor = "#000";
+Chart.defaults.global.defaultFontStyle = "bold";
+
+function createChart(chartID, values, xlabels, legend) {
+    var chartData = {
+    labels : xlabels,
+    datasets : [{
+        label: legend[0],
+        fill: true,
+        lineTension: 0.1,
+        backgroundColor: "rgba(192,180,75,0.4)",
+        borderColor: "rgba(192,180,75,1)",
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: 'miter',
+        pointBorderColor: "rgba(192,180,75,1)",
+        pointBackgroundColor: "#fff",
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: "rgba(192,180,75,1)",
+        pointHoverBorderColor: "rgba(255,255,255,1)",
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10,
+        data : values,
+        spanGaps: false
+    }]
+    };
+
+    var str = "chart";
+    str = str + chartID;
+    var ctx = document.getElementById(str).getContext("2d");
+
+    var chart = new Chart(ctx, {
+        type: 'line',
+        data: chartData,
+        options: {
+            tooltips: {
+                enabled: true,
+                mode: 'single',
+                callbacks: {
+                    label: function(tooltipItems, data) {
+                            return tooltipItems.yLabel + ' ' + legend[1];
+                        }
+                }
+            },
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: legend[1]
+                    }
+                    
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Date'
+                    }
+                }]
+            }
+        }
+    });
+    return chart;
+}
+
+var i;
+var count = 1;
+for (i = 1; i <  5; i++) {
+    var str = "chart";
+    str = str + i;
+
+    if (count > 4) {
+        count = 1;
+    }
+
+    if (i % 2 === 0) {
+        if (i % 4 === 0) {
+            // Temperature
+            eval(str + ' = ' + 'createChart(' + i + ', [{%- for item in dailyData[2] %}{{item}}, {%- endfor %}], [{%- for item in labels %} "{{item}}", {%- endfor %}], [{%- for item in legend[0] %} "{{item}}", {%- endfor %}]);');    
+        }
+        else {
+            // Precipitation
+            eval(str + ' = ' + 'createChart(' + i + ', [{%- for item in dailyData[4] %}{{item}}, {%- endfor %}], [{%- for item in labels %} "{{item}}", {%- endfor %}], [{%- for item in legend[1] %} "{{item}}", {%- endfor %}]);');
+        }
+    }
+    else {
+        if (i % 3 === 0) {
+            // Humidity
+            eval(str + ' = ' + 'createChart(' + i + ', [{%- for item in dailyData[5] %}{{item}}, {%- endfor %}], [{%- for item in labels %} "{{item}}", {%- endfor %}], [{%- for item in legend[2] %} "{{item}}", {%- endfor %}]);');
+        }
+        else {
+            // Evapotranspiration
+            eval(str + ' = ' + 'createChart(' + i + ', [{%- for item in dailyData[3] %}{{item}}, {%- endfor %}], [{%- for item in labels %} "{{item}}", {%- endfor %}], [{%- for item in legend[3] %} "{{item}}", {%- endfor %}]);');
+        }
+    }
+
+    switch(count) {
+        case 1:
+            eval(str + '.data.datasets[0].backgroundColor = "rgba(192,155,75,0.4)";' );
+            eval(str + '.data.datasets[0].borderColor = "rgba(192,155,75,1)";' );
+            eval(str + '.data.datasets[0].pointBorderColor = "rgba(192,155,75,1)";' );
+            eval(str + '.data.datasets[0].pointHoverBackgroundColor = "rgba(192,155,75,1)";' );
+            eval(str + '.update();');
+            break;
+        case 2:
+            eval(str + '.data.datasets[0].backgroundColor = "rgba(75,75,192,0.4)";' );
+            eval(str + '.data.datasets[0].borderColor = "rgba(75,75,192,1)";' );
+            eval(str + '.data.datasets[0].pointBorderColor = "rgba(75,75,192,1)";' );
+            eval(str + '.data.datasets[0].pointHoverBackgroundColor = "rgba(75,75,192,1)";' );
+            eval(str + '.update();');
+            break;
+        case 3:
+            eval(str + '.data.datasets[0].backgroundColor = "rgba(75,192,192,0.4)";' );
+            eval(str + '.data.datasets[0].borderColor = "rgba(75,192,192,1)";' );
+            eval(str + '.data.datasets[0].pointBorderColor = "rgba(75,192,192,1)";' );
+            eval(str + '.data.datasets[0].pointHoverBackgroundColor = "rgba(75,192,192,1)";' );
+            eval(str + '.update();');
+            break;
+    }
+
+    count++;
+};
+</script>
+
+<!-- Google Maps and pins -->
+<script>
+    function initMap() {
+        var location = [{{ coords[0] }}, {{ coords[1] }}, "<strong>{{ dailyData[0] }}</strong>"];
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 6,
+            center: new google.maps.LatLng(31.284673, -89.556397),
+            mapTypeId: google.maps.MapTypeId.TERRAIN
+        });
+
+        var infowindow = new google.maps.InfoWindow({});
+
+        var marker, i;
+
+        var precipitation = {{ hourlyData[7] }};
+
+        marker = new google.maps.Marker({
+            position: new google.maps.LatLng(location[0], location[1]),
+            map: map,
+        });
+
+        
+        if (precipitation > 0) {
+            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png')
+        }
+        else {
+            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png')
+        }
+
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+                infowindow.setContent(location[2]);
+                infowindow.open(map, marker);
+            }
+        })(marker, i));
+
+        infowindow.setContent(location[2]);
+        infowindow.open(map, marker);
+        
+    }
+</script>
+</body>
+
+</html>

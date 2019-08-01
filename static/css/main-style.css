@@ -172,7 +172,7 @@ canvas {
 	}
 }
 
-#myDiv {
+#loaded {
 	display: grid;
 	text-align: center;
 }
@@ -242,6 +242,7 @@ th {
 .Explanation {
 	background: inherit;
 	margin-bottom: 0px;
+	max-height: 180px;
 }
 
 .container {
