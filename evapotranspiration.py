@@ -78,14 +78,14 @@ def DegreesToRad(latitude):
 
 # Estimates extraterrestial radiation
 def EtRadiation(latitude, nDate):                                                           #φ, J
-    latDegrees = DegreesToRad(latitude)                                                     #φ
+    latRad = DegreesToRad(latitude)                                                     #φ
     solarConstant = 0.0820                                                                  #Gsc
     nDay = nDate                                                                            #J
-    inverseRelativeDistance = 1 + 0.33 * math.cos(((2 * math.pi)/365) * nDay)               #dr
+    inverseRelativeDistance = 1 + 0.033 * math.cos(((2 * math.pi)/365) * nDay)               #dr
     solarDeclination = 0.409 * math.sin(((2 * math.pi)/365) * nDay - 1.39)                  #δ
-    sunsetHourAngle = math.acos(-math.tan(latDegrees) * math.tan(inverseRelativeDistance))  #ωs
-    etRad = ((24*60)/math.pi) * nDay * solarConstant * (sunsetHourAngle * math.sin(latDegrees) 
-            * math.sin(solarDeclination) + math.cos(latitude) * math.cos(solarDeclination) * math.sin(sunsetHourAngle))
+    sunsetHourAngle = math.acos(-math.tan(latRad) * math.tan(solarDeclination))  #ωs
+    etRad = ((24*60)/math.pi) * solarConstant * inverseRelativeDistance * (sunsetHourAngle * math.sin(latRad) * 
+    math.sin(solarDeclination) + math.cos(latRad) * math.cos(solarDeclination) * math.sin(sunsetHourAngle))
     return etRad
 
 
@@ -95,10 +95,8 @@ def EvapoTranspiration(tMax, tMin, etRad):
     tMaxC = (tMax - 32) * (5/9)
     tMinC = (tMin - 32) * (5/9)
     tMeanC = (tMaxC + tMinC) / 2
-    evapoT = 0.023 * 0.408 * (tMeanC + 17.8) * (tMaxC - tMinC)**0.5 * etRad
-    #Switch to Turc method
-    #TEMPORARY ADJUSTMENT
-    evapoT = evapoT / 1000
+    solarRad = 0.16  * (tMaxC - tMinC)**0.5 * etRad
+    evapoT = 0.0133 * (tMeanC / (tMeanC + 15)) * ((23.886 * solarRad + 50)/25.4)
     return evapoT
 
 
