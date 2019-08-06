@@ -100,7 +100,7 @@ def GetHourlyDataFromHTML(url):
 
     # remove unnecessary columns
     for i in range(0, len(data), 1):
-        data[i] = data[i][:15]
+        data[i] = data[i][:16]
 
     # if data is blank use NaN (not a number)
     data = [[float('NaN') if item == '' else item for item in row] for row in data]
@@ -115,6 +115,7 @@ def GetHourlyDataFromHTML(url):
         data[i][12] = float(data[i][12])
         data[i][13] = float(data[i][13])
         data[i][14] = float(data[i][14])
+        data[i][15] = float(data[i][15])
 
     # place data from today's date in a seperate table
     todaysData = []

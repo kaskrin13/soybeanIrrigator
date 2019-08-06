@@ -76,6 +76,41 @@ hourlyHtmlUrls = [#("http://deltaweather.extension.msstate.edu/7-days-hourly-tab
 def DegreesToRad(latitude):
     return latitude * (math.pi/180)
 
+def WindDirection(degDirection, windspeed):
+    if (0 <= degDirection <= 11.25 or 348.75 <= degDirection <= 360):
+        windspeed = str(windspeed) + " N"
+    elif (11.25 < degDirection <= 33.75):
+        windspeed = str(windspeed) + " NNE"
+    elif (33.75 < degDirection <= 56.25):
+        windspeed = str(windspeed) + " NE"
+    elif (56.25 < degDirection <= 78.75):
+        windspeed = str(windspeed) + " ENE"
+    elif (78.75 < degDirection <= 101.25):
+        windspeed = str(windspeed) + " E"
+    elif (101.25 < degDirection <= 123.75):
+        windspeed = str(windspeed) + " ESE"
+    elif (123.75 < degDirection <= 146.25):
+        windspeed = str(windspeed) + " SE"
+    elif (146.25 < degDirection <= 168.75):
+        windspeed = str(windspeed) + " SSE"
+    elif (168.75 < degDirection <= 191.25):
+        windspeed = str(windspeed) + " S"
+    elif (191.25 < degDirection <= 213.75):
+        windspeed = str(windspeed) + " SSW"
+    elif (213.75 < degDirection <= 236.25):
+        windspeed = str(windspeed) + " SW"
+    elif (236.25 < degDirection <= 258.75):
+        windspeed = str(windspeed) + " WSW"
+    elif (258.75 < degDirection <= 281.25):
+        windspeed = str(windspeed) + " W"
+    elif (281.25 < degDirection <= 303.75):
+        windspeed = str(windspeed) + " WNW"
+    elif (303.75 < degDirection <= 326.25):
+        windspeed = str(windspeed) + " NW"
+    elif (326.25 < degDirection <= 348.75):
+        windspeed = str(windspeed) + " NNW"
+    return windspeed
+
 # Estimates extraterrestial radiation
 def EtRadiation(latitude, nDate):                                                           #φ, J
     latRad = DegreesToRad(latitude)                                                     #φ
@@ -113,7 +148,7 @@ def DailyChart(HTMLtup):
         tMin = data[i][4]
         etRad = EtRadiation(HTMLtup[1], data[i][1])
         evapoT = EvapoTranspiration(tMax, tMin, etRad)
-        et.append(evapoT)
+        et.append(round(evapoT, 2))
 
     temperatures = []
     rainfall = []
@@ -140,10 +175,10 @@ def HourlyData(HTMLtup):
     time = datetime.datetime.strptime(data[-1][0] + " " + data[-1][1], '%m/%d/%Y %H:%M:%S')
     temp = data[-1][7]
     humidity = data[-1][12]
-    windspeed = data[-1][14]
+    windspeed = WindDirection(data[-1][15], data[-1][14])
     rainfall = data[-1][13]
     moreThanAnHour = processing.UpdatedLastHour(processing.MakeTimeAware(time))
-    tableData = [HTMLtup[1], str(time.time()), temp, windspeed, humidity, tMin, tMax, rainfall, moreThanAnHour]
+    tableData = [HTMLtup[1], time.time().strftime('%H:%M'), temp, windspeed, humidity, tMin, tMax, rainfall, moreThanAnHour]
 
     return tableData
         
